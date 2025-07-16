@@ -1,0 +1,152 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Utility classes */
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #fcc;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  background-color: #efe;
+  color: #3c3;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #cfc;
+  margin-bottom: 1rem;
+}
+
+/* Button styles */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* Form styles */
+input, textarea, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Touch-friendly improvements for mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  button {
+    padding: 0.6rem 1.2rem;
+    min-height: 44px; /* Minimum touch target size */
+  }
+  
+  input, textarea, select {
+    padding: 0.6rem;
+    min-height: 44px; /* Minimum touch target size */
+  }
+
+  /* Improve touch scrolling */
+  .kanban-board {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .activity-list {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    min-height: 40px;
+  }
+  
+  input, textarea, select {
+    padding: 0.5rem;
+    min-height: 40px;
+  }
+}
+
+/* Prevent zoom on input focus for iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+} 
