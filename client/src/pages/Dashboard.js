@@ -9,6 +9,8 @@ import ActivityPanel from '../components/ActivityPanel';
 import ConflictModal from '../components/ConflictModal';
 import '../styles/Dashboard.css';
 
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -46,7 +48,7 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('/api/tasks');
+      const response = await axios.get(`${API_BASE_URL}/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error('Failed to fetch tasks:', error);
@@ -57,7 +59,7 @@ const Dashboard = () => {
 
   const fetchActivities = async () => {
     try {
-      const response = await axios.get('/api/activities');
+      const response = await axios.get(`${API_BASE_URL}/api/activities`);
       setActivities(response.data);
     } catch (error) {
       console.error('Failed to fetch activities:', error);
@@ -98,7 +100,7 @@ const Dashboard = () => {
     setIsDragging(true);
 
     try {
-      const response = await axios.patch(`/api/tasks/${draggableId}/move`, {
+      const response = await axios.patch(`${API_BASE_URL}/api/tasks/${draggableId}/move`, {
         status: destination.droppableId
       }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -135,7 +137,7 @@ const Dashboard = () => {
 
   const handleCreateTask = async (taskData, setLocalError) => {
     try {
-      const response = await axios.post('/api/tasks', taskData, {
+      const response = await axios.post(`${API_BASE_URL}/api/tasks`, taskData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const newTask = response.data;
@@ -157,7 +159,7 @@ const Dashboard = () => {
 
   const handleEditTask = async (taskData, setLocalError) => {
     try {
-      const response = await axios.put(`/api/tasks/${taskData._id}`, taskData, {
+      const response = await axios.put(`${API_BASE_URL}/api/tasks/${taskData._id}`, taskData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const updatedTask = response.data;
@@ -192,7 +194,7 @@ const Dashboard = () => {
     if (!window.confirm('Are you sure you want to delete this task?')) return;
 
     try {
-      await axios.delete(`/api/tasks/${taskId}`);
+      await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`);
       setTasks(prev => prev.filter(task => task._id !== taskId));
 
       emitTaskDelete({
@@ -214,7 +216,7 @@ const Dashboard = () => {
 
   const handleSmartAssign = async (task) => {
     try {
-      const response = await axios.post(`/api/tasks/${task._id}/smart-assign`, {}, {
+      const response = await axios.post(`${API_BASE_URL}/api/tasks/${task._id}/smart-assign`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const updatedTask = response.data;
