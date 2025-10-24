@@ -1,0 +1,160 @@
+.label-manager {
+  margin: 12px 0;
+}
+
+.current-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  gap: 4px;
+}
+
+.label-remove {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label-remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.add-label-btn {
+  background: #f8f9fa;
+  border: 1px dashed #dee2e6;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.add-label-btn:hover {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.label-picker {
+  position: absolute;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  z-index: 1000;
+  min-width: 250px;
+  margin-top: 8px;
+}
+
+.available-labels h4,
+.create-label h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #495057;
+}
+
+.label-option {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  gap: 8px;
+  margin-bottom: 4px;
+  transition: background 0.2s ease;
+}
+
+.label-option:hover {
+  background: #f8f9fa;
+}
+
+.label-option.selected {
+  background: #e3f2fd;
+}
+
+.label-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.create-label {
+  border-top: 1px solid #e9ecef;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.label-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-name-input {
+  padding: 6px 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.color-picker {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.color-option:hover,
+.color-option.selected {
+  border-color: #495057;
+  transform: scale(1.1);
+}
+
+.create-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.create-btn:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.create-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
