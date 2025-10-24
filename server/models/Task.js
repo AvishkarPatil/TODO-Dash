@@ -13,7 +13,7 @@ const taskSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['todo', 'in-progress', 'done'],
+    enum: ['todo', 'in-progress', 'review', 'done'],
     default: 'todo'
   },
   priority: {
@@ -37,15 +37,43 @@ const taskSchema = new mongoose.Schema({
   dueDate: {
     type: Date
   },
-  tags: [{
-    type: String,
-    trim: true
+  labels: [{
+    id: String,
+    name: String,
+    color: String
   }],
   attachments: [{
-    name: String,
+    id: String,
+    filename: String,
+    originalName: String,
     url: String,
-    type: String
+    size: Number,
+    mimetype: String,
+    uploadedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    uploadedAt: {
+      type: Date,
+      default: Date.now
+    }
   }],
+  timeTracking: {
+    totalTime: {
+      type: Number,
+      default: 0
+    },
+    sessions: [{
+      startTime: Date,
+      endTime: Date,
+      duration: Number,
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    }]
+  },
+  completedAt: Date,
   board: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Board',
@@ -54,7 +82,16 @@ const taskSchema = new mongoose.Schema({
   version: {
     type: Number,
     default: 0
-  }
+  },
+  reminders: [{
+    type: {
+      type: String,
+      enum: ['email', 'push'],
+      default: 'email'
+    },
+    sentAt: Date,
+    scheduledFor: Date
+  }]
 }, {
   timestamps: true
 });

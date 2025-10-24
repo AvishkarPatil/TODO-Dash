@@ -41,7 +41,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
 });
 
 // Column names to check against (case-insensitive)
-const COLUMN_NAMES = ['to do', 'in progress', 'done'];
+const COLUMN_NAMES = ['to do', 'in progress', 'review', 'done'];
 
 // Create new task
 router.post('/', authenticateToken, async (req, res) => {
@@ -151,12 +151,18 @@ router.put('/:id', authenticateToken, async (req, res) => {
         });
       }
     }
-    // Increment version
+    // Set completion date if moving to done
     const updateData = {
       ...req.body,
       lastUpdatedBy: req.user._id,
       version: version + 1
     };
+    
+    if (req.body.status === 'done' && currentTask.status !== 'done') {
+      updateData.completedAt = new Date();
+    } else if (req.body.status !== 'done' && currentTask.status === 'done') {
+      updateData.completedAt = null;
+    }
     const task = await Task.findByIdAndUpdate(
       req.params.id,
       updateData,
@@ -235,9 +241,18 @@ router.patch('/:id/move', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: 'Task not found' });
     }
     
+    const oldStatus = task.status;
     task.status = status;
     task.lastUpdatedBy = req.user._id;
     task.version += 1;
+    
+    // Set completion date if moving to done
+    if (status === 'done' && oldStatus !== 'done') {
+      task.completedAt = new Date();
+    } else if (status !== 'done' && oldStatus === 'done') {
+      task.completedAt = null;
+    }
+    
     await task.save();
     
     // Log activity

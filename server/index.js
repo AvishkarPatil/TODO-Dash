@@ -10,6 +10,13 @@ require('dotenv').config({ path: '../.env' });
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/tasks');
 const activityRoutes = require('./routes/activities');
+const attachmentRoutes = require('./routes/attachments');
+const labelRoutes = require('./routes/labels');
+const analyticsRoutes = require('./routes/analytics');
+const smartAssignRoutes = require('./routes/smartAssign');
+
+// Initialize reminder service
+require('./services/reminderService');
 
 const app = express();
 const server = http.createServer(app);
@@ -38,6 +45,9 @@ app.use(cors({
 app.options('*', cors());
 app.use(express.json());
 
+// Serve static files for attachments
+app.use('/uploads', express.static('uploads'));
+
 // Trust proxy for rate limiting
 app.set('trust proxy', 1);
 
@@ -52,6 +62,10 @@ app.use(limiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/activities', activityRoutes);
+app.use('/api/tasks', attachmentRoutes);
+app.use('/api/labels', labelRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/smart-assign', smartAssignRoutes);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
@@ -72,6 +86,14 @@ io.on('connection', (socket) => {
 
   socket.on('task-deleted', (data) => {
     socket.to(data.roomId).emit('task-deleted', data);
+  });
+
+  socket.on('task-moved', (data) => {
+    socket.to(data.roomId).emit('task-moved', data);
+  });
+
+  socket.on('time-updated', (data) => {
+    socket.to(data.roomId).emit('time-updated', data);
   });
 
   socket.on('disconnect', () => {
