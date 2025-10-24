@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const { authLimiter, uploadLimiter, apiLimiter } = require('./middleware/rateLimiter');
 const http = require('http');
 const socketIo = require('socket.io');
 require('dotenv').config({ path: '../.env' });
@@ -14,6 +14,7 @@ const attachmentRoutes = require('./routes/attachments');
 const labelRoutes = require('./routes/labels');
 const analyticsRoutes = require('./routes/analytics');
 const smartAssignRoutes = require('./routes/smartAssign');
+const searchRoutes = require('./routes/search');
 
 // Initialize reminder service
 require('./services/reminderService');
@@ -51,21 +52,18 @@ app.use('/uploads', express.static('uploads'));
 // Trust proxy for rate limiting
 app.set('trust proxy', 1);
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use(limiter);
+// Apply general rate limiting
+app.use('/api/', apiLimiter);
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/activities', activityRoutes);
-app.use('/api/tasks', attachmentRoutes);
+app.use('/api/tasks', uploadLimiter, attachmentRoutes);
 app.use('/api/labels', labelRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/smart-assign', smartAssignRoutes);
+app.use('/api/search', searchRoutes);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
